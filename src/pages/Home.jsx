@@ -4,7 +4,7 @@ import useFetch from '../useFetch';
 import EmployeeTable from '../components/EmployeeTable';
 
 function Home() {
-    const { data: employees, isPending, error } = useFetch(`${process.env.URL}/employees`);
+    const { data: employees, isPending, error } = useFetch(`${import.meta.env.VITE_URL}/employees`);
 
     return (
         <section>

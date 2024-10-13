@@ -22,7 +22,7 @@ const AddEmployee = () => {
     };
 
     try {
-      await axios.post(`${process.env.URL}/employees`, newEmp);
+      await axios.post(`${import.meta.env.VITE_URL}/employees`, newEmp);
       alert('Employee added successfully!');
 
       setFormData({

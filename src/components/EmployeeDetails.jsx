@@ -1,12 +1,12 @@
-import { useParams, useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 import useFetch from "../useFetch";
 
 const EmployeeDetails = () => {
   const { id } = useParams();
-  const history = useHistory(); 
-  const { data: employee, error, isPending } = useFetch(`${process.env.URL}/employees/` + id);
+  const navigate = useNavigate(); 
+  const { data: employee, error, isPending } = useFetch(`${import.meta.env.VITE_URL}/employees/` + id);
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
     name: '',
@@ -27,7 +27,7 @@ const EmployeeDetails = () => {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${process.env.URL}/employees/${id}`, editForm);
+      await axios.put(`${process.env.REACT_APP_URL}/employees/${id}`, editForm);
       alert("Employee details updated successfully!");
       setIsEditing(false);
     } catch (err) {
@@ -39,9 +39,9 @@ const EmployeeDetails = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        await axios.delete(`${process.env.URL}/employees/${id}`);
+        await axios.delete(`${process.env.REACT_APP_API_URL}/employees/${id}`);
         alert("Employee deleted successfully!");
-        history.push("/"); 
+        navigate("/"); 
       } catch (err) {
         console.error("Error deleting employee:", err);
         alert("Error deleting employee.");
@@ -77,7 +77,7 @@ const EmployeeDetails = () => {
             <input type="email" name="email" value={editForm.email} onChange={handleChange} />
           </label>
           <button type="submit">Save Changes</button>
-          <button type="button" onClick={() => setIsEditing(false)}>
+          <button type="button" onClick={() => setIsEditing(false)} style={{ marginLeft: "10px" }}>
             Cancel
           </button>
         </form>

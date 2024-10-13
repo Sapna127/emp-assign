@@ -1,0 +1,19 @@
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "John Doe",
+      "designation": "Software Engineer",
+      "department": "Engineering",
+      "joiningDate": "2022-05-10",
+      "salary": 60000,
+      "email": "johndoe@example.com",
+      "phoneNumber": "123-456-7890"
+    },
+    {
+      "id": 1728811951099,
+      "name": "Dream299",
+      "email": "ghg@hjhj.bjh"
+    }
+  ]
+}

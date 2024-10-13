@@ -10,7 +10,7 @@ function Home() {
         </div>
       </div>
       <div className="space-x-4">
-        <Link to="/add-emp">
+        <Link to="employees/add-emp">
           <button className="bg-black text-white py-5 px-10 rounded font-semibold hover:bg-gray-900">
             + Add Employee
           </button>

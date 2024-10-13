@@ -6,7 +6,7 @@ function Home() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
       <div>
         <div className="text-[70px] font-bold mb-8 text-center flex flex-col">
-          Add & See Your <span className='text-blue-500'>EMPlOYEE DETAILS..</span>
+          Add & See Your <span className='text-blue-500'>EMPLOYEE DETAILS..</span>
         </div>
       </div>
       <div className="space-x-4">

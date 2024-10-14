@@ -9,7 +9,6 @@ const useFetch = (url) => {
         setTimeout(() => {
             fetch(url, {
                 method: 'GET', 
-                credentials: 'include', 
             })
                 .then(res => {
                     if (!res.ok) {

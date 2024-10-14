@@ -5,7 +5,12 @@ const server = jsonServer.create();
 const router = jsonServer.router('./db.json');
 const middlewares = jsonServer.defaults();
 
-server.use(cors());
+server.use(cors({
+    origin: 'https://emppp.vercel.app/', 
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  }));
+  
 server.use(middlewares);
 server.use(router);
 

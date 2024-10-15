@@ -1,12 +1,12 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
-import axios from "axios";
-import useFetch from "../useFetch";
+import { useEmployees } from '../EmployeeContext';
 
 const EmployeeDetails = () => {
-  const { id } = useParams();
+  const { id } = useParams();  
   const navigate = useNavigate();
-  const { data: employee, error, isPending } = useFetch(`${import.meta.env.VITE_URL}/employees/${id}`);
+  const { employees, updateEmployee, deleteEmployee, fetchEmployees } = useEmployees();
+  
   const [isEditing, setIsEditing] = useState(false);
   const [editForm, setEditForm] = useState({
     name: '',
@@ -17,6 +17,14 @@ const EmployeeDetails = () => {
     salary: '',
     phoneNumber: ''
   });
+
+  const employee = employees.find(emp => emp.id === (id));
+
+  useEffect(() => {
+    if (!employees.length) {
+      fetchEmployees();  
+    }
+  }, [employees.length, fetchEmployees]);
 
   useEffect(() => {
     if (employee) {
@@ -39,7 +47,20 @@ const EmployeeDetails = () => {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`${import.meta.env.VITE_URL}/employees/${id}`, editForm);
+      const response = await fetch(`${import.meta.env.VITE_URL}/employees/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(editForm), 
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update employee details");
+      }
+
+      const updatedEmployee = await response.json();
+      updateEmployee(updatedEmployee);
       alert("Employee details updated successfully!");
       setIsEditing(false);
     } catch (err) {
@@ -51,9 +72,17 @@ const EmployeeDetails = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        await axios.delete(`${import.meta.env.VITE_URL}/employees/${id}`);
+        const response = await fetch(`${import.meta.env.VITE_URL}/employees/${id}`, {
+          method: 'DELETE',
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to delete employee");
+        }
+
+        deleteEmployee(parseInt(id));
         alert("Employee deleted successfully!");
-        navigate("/");
+        navigate("/employees");
       } catch (err) {
         console.error("Error deleting employee:", err);
         alert("Error deleting employee.");
@@ -63,8 +92,9 @@ const EmployeeDetails = () => {
 
   return (
     <section className="mt-5 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-300">
-      {isPending && <p className="text-center text-gray-500">Loading employee details...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      { employees.length && !employee ? (
+        <p className="text-center text-gray-500">No employee found.</p>
+      ) : null }
 
       {employee && !isEditing && (
         <>

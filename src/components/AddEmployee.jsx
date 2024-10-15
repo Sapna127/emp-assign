@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import Button from '../components/Button';
 import FormInput from '../components/FormInput';
+import { useEmployees } from '../EmployeeContext';
+import { useNavigate } from 'react-router-dom';
 
 const AddEmployee = () => {
+  const { addEmployee } = useEmployees();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,21 +27,27 @@ const AddEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${import.meta.env.VITE_URL}/employees`, formData);
-      alert('Employee added successfully!');
-      setFormData({
-        name: '',
-        email: '',
-        designation: '',
-        department: '',
-        joiningDate: '',
-        salary: '',
-        phoneNumber: '',
+      const response = await fetch(`${import.meta.env.VITE_URL}/employees`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData), 
       });
+  
+      if (!response.ok) {
+        throw new Error('Failed to add employee');
+      }
+      const newEmployee = await response.json();
+      addEmployee(newEmployee);
+      alert('Employee added successfully!');
+      navigate('/employees');
     } catch (error) {
+      console.error('Error adding employee:', error);
       alert('Error adding the employee.');
     }
   };
+  
 
   return (
     <div className="flex items-center justify-center h-screen bg-white">

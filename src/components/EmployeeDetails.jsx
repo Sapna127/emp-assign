@@ -18,13 +18,11 @@ const EmployeeDetails = () => {
     phoneNumber: ''
   });
 
-  const employee = employees.find(emp => emp.id === (id));
-
   useEffect(() => {
-    if (!employees.length) {
-      fetchEmployees();  
-    }
-  }, [employees.length, fetchEmployees]);
+    fetchEmployees();
+  }, [fetchEmployees]);
+
+  const employee = employees.find(emp => emp.id === (id));
 
   useEffect(() => {
     if (employee) {
@@ -47,20 +45,7 @@ const EmployeeDetails = () => {
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/employees/${id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editForm), 
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to update employee details");
-      }
-
-      const updatedEmployee = await response.json();
-      updateEmployee(updatedEmployee);
+      await updateEmployee(id, editForm);
       alert("Employee details updated successfully!");
       setIsEditing(false);
     } catch (err) {
@@ -72,15 +57,7 @@ const EmployeeDetails = () => {
   const handleDelete = async () => {
     if (window.confirm("Are you sure you want to delete this employee?")) {
       try {
-        const response = await fetch(`${import.meta.env.VITE_URL}/employees/${id}`, {
-          method: 'DELETE',
-        });
-
-        if (!response.ok) {
-          throw new Error("Failed to delete employee");
-        }
-
-        deleteEmployee(parseInt(id));
+        await deleteEmployee((id));
         alert("Employee deleted successfully!");
         navigate("/employees");
       } catch (err) {
@@ -89,7 +66,6 @@ const EmployeeDetails = () => {
       }
     }
   };
-
   return (
     <section className="mt-5 max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg border border-gray-300">
       { employees.length && !employee ? (

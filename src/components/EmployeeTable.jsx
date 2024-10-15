@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useEmployees } from '../EmployeeContext';
 
 function EmployeeTable() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedDepartment, setSelectedDepartment] = useState('');
-  const { employees } = useEmployees();
+
+  const { employees, fetchEmployees } = useEmployees();
+
+  useEffect(() => {
+    fetchEmployees();
+  }, [fetchEmployees]);
 
   const departments = [...new Set(employees.map(employee => employee.department))];
 

@@ -27,19 +27,7 @@ const AddEmployee = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${import.meta.env.VITE_URL}/employees`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData), 
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to add employee');
-      }
-      const newEmployee = await response.json();
-      addEmployee(newEmployee);
+      await addEmployee(formData);
       alert('Employee added successfully!');
       navigate('/employees');
     } catch (error) {
@@ -47,7 +35,7 @@ const AddEmployee = () => {
       alert('Error adding the employee.');
     }
   };
-  
+
 
   return (
     <div className="flex items-center justify-center h-screen bg-white">
@@ -69,7 +57,7 @@ const AddEmployee = () => {
           </div>
           
           <div className="flex justify-center mt-4">
-                <Button type="submit">Add Employee</Button>
+            <Button type="submit">Add Employee</Button>
           </div>
         </form>
       </div>
